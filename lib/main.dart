@@ -1,10 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_app/responsive/mobile_screen_layout.dart';
-import 'package:instagram_clone_app/responsive/responsive_layout_screen.dart';
-import 'package:instagram_clone_app/responsive/web_screen_layout.dart';
-import 'package:instagram_clone_app/screens/login_screen.dart';
 import 'package:instagram_clone_app/screens/signup_screen.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
 

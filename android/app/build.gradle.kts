@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.instagram_clone_app"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.instagram_clone_app"
