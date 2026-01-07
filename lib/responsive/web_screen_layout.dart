@@ -5,6 +5,13 @@ class WebScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text("This is the mobile screen Layoput"));
+    return Scaffold(
+      body: Center(
+        child: Text(
+          "This is the web screen Layout",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 }
