@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone_app/resources/auth_methods.dart';
+import 'package:instagram_clone_app/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone_app/responsive/responsive_layout_screen.dart';
+import 'package:instagram_clone_app/responsive/web_screen_layout.dart';
+import 'package:instagram_clone_app/screens/login_screen.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
 import 'package:instagram_clone_app/utils/utils.dart';
 import 'package:instagram_clone_app/widgets/text_feild_input.dart';
@@ -78,7 +82,21 @@ class _SignupScreenState extends State<SignupScreen> {
       showSnackBar(res, context);
     } else {
       // navigate to home later
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ResponsiveLayoutScreen(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
     }
+  }
+
+  void navigateToLogin() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   @override
@@ -165,7 +183,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text("Sign Up"),
+                      : const Text("SignUp"),
                 ),
               ),
 
@@ -177,9 +195,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   const Text("Already have an account? "),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: navigateToLogin,
                     child: const Text(
-                      "Log In",
+                      "Login.",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),

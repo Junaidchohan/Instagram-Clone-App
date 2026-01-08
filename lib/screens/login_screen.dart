@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone_app/resources/auth_methods.dart';
+import 'package:instagram_clone_app/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone_app/responsive/responsive_layout_screen.dart';
+import 'package:instagram_clone_app/responsive/web_screen_layout.dart';
+import 'package:instagram_clone_app/screens/signup_screen.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
 import 'package:instagram_clone_app/utils/utils.dart';
 import 'package:instagram_clone_app/widgets/text_feild_input.dart';
@@ -47,9 +51,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res == "success") {
       // Navigate to home screen or main app
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ResponsiveLayoutScreen(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
     } else {
       showSnackBar(res, context);
     }
+  }
+
+  void navigateToSignup() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => SignupScreen()));
   }
 
   @override
@@ -99,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text("Log in"),
+                      : const Text("Login."),
                 ),
               ),
               const SizedBox(height: 12),
@@ -110,11 +128,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Text("Don't have an account? "),
                   GestureDetector(
-                    onTap: () {
-                      // Navigate to signup screen
-                    },
+                    // Navigate to signup screen
+                    onTap: navigateToSignup,
                     child: const Text(
-                      "Sign up",
+                      "Signup.",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
