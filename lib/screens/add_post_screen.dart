@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone_app/models/user.dart';
+import 'package:instagram_clone_app/providers/user_provider.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
+import 'package:instagram_clone_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -9,71 +15,113 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
+  Uint8List? _file;
+  final TextEditingController _descriptionController = TextEditingController();
+  _selecImage(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text("Create a Post"),
+          children: [
+            SimpleDialogOption(
+              padding: EdgeInsets.all(20),
+              child: Text("Take photo"),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Uint8List file = await pickImage(ImageSource.camera);
+                setState(() {
+                  _file = file;
+                });
+              },
+            ),
+            SimpleDialogOption(
+              padding: EdgeInsets.all(20),
+              child: Text("Choose from gallery"),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Uint8List file = await pickImage(ImageSource.gallery);
+                setState(() {
+                  _file = file;
+                });
+              },
+            ),
+            SimpleDialogOption(
+              padding: EdgeInsets.all(20),
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // return IconButton(icon: Icon(Icons.upload_file), onPressed: () {});
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
-        title: Text("Post to"),
-        centerTitle: false,
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "Post",
-              style: TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+    final User user = Provider.of<UserProvider>(context).getUser;
+    return _file == null
+        ? IconButton(icon: Icon(Icons.upload_file), onPressed: () {})
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: mobileBackgroundColor,
+              leading: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.arrow_back),
               ),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                  "https://img.freepik.com/free-photo/abstract-flowing-neon-wave-background_53876-101942.jpg?semt=ais_hybrid&w=740&q=80",
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'write a caption...',
-                    border: InputBorder.none,
-                  ),
-                  maxLines: 8,
-                ),
-              ),
-              SizedBox(
-                width: 45,
-                height: 45,
-                child: AspectRatio(
-                  aspectRatio: 487 / 451,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          "https://img.freepik.com/free-photo/abstract-flowing-neon-wave-background_53876-101942.jpg?semt=ais_hybrid&w=740&q=80",
-                        ),
-                      ),
+              title: Text("Post to"),
+              centerTitle: false,
+              actions: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Post",
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
                 ),
-              ),
-              Divider(),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+            body: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(backgroundImage: NetworkImage(user.photoUrl)),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: TextField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          hintText: 'write a caption...',
+                          border: InputBorder.none,
+                        ),
+                        maxLines: 8,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 45,
+                      height: 45,
+                      child: AspectRatio(
+                        aspectRatio: 487 / 451,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: MemoryImage(_file!)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(),
+                  ],
+                ),
+              ],
+            ),
+          );
   }
 }
