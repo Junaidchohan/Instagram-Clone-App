@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone_app/models/user.dart' as model;
 import 'package:instagram_clone_app/resources/storage_methods.dart';
 
 class AuthMethods {
@@ -29,10 +30,13 @@ class AuthMethods {
           username.isNotEmpty &&
           bio.isNotEmpty) {
         // 1. Register user in Firebase Authentication
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+        UserCredential cred = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        // UserCredential cred = await _auth.createUserWithEmailAndPassword(
+        //   email: email,
+        //   password: password,
+        // );
+        print("Image bytes length: ${file.length}");
 
         print("User registered with UID: ${cred.user!.uid}");
 
@@ -44,15 +48,20 @@ class AuthMethods {
         );
 
         // 3. Add user info to Firestore database
-        await _firestore.collection("users").doc(cred.user!.uid).set({
-          "username": username,
-          "uid": cred.user!.uid,
-          "email": email,
-          "bio": bio,
-          "followers": [],
-          "following": [],
-          "photoUrl": photoUrl,
-        });
+
+        model.User user = model.User(
+          username: username,
+          uid: cred.user!.uid,
+          photoUrl: photoUrl,
+          email: email,
+          bio: bio,
+          followers: [],
+          following: [],
+        );
+        await _firestore
+            .collection("users")
+            .doc(cred.user!.uid)
+            .set(user.toJson());
 
         res = "success";
       } else {

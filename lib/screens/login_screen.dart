@@ -126,7 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an account? "),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text("Don't have an account? "),
+                  ),
                   GestureDetector(
                     // Navigate to signup screen
                     onTap: navigateToSignup,

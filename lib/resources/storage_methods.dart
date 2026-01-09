@@ -16,7 +16,7 @@ class StorageMethods {
     Reference _ref = _storage
         .ref()
         .child(childName)
-        .child(_auth.currentUser!.uid);
+        .child('${_auth.currentUser!.uid}.jpg');
 
     UploadTask uploadTask = _ref.putData(file);
     TaskSnapshot snap = await uploadTask;

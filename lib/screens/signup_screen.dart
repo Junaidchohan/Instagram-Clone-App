@@ -193,7 +193,10 @@ class _SignupScreenState extends State<SignupScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Already have an account? "),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text('Already have an account?'),
+                  ),
                   GestureDetector(
                     onTap: navigateToLogin,
                     child: const Text(

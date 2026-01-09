@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone_app/responsive/mobile_screen_layout.dart';
 import 'package:instagram_clone_app/responsive/responsive_layout_screen.dart';
 import 'package:instagram_clone_app/responsive/web_screen_layout.dart';
-import 'package:instagram_clone_app/screens/login_screen.dart';
 import 'package:instagram_clone_app/screens/signup_screen.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
 
@@ -18,7 +17,7 @@ void main() async {
         appId: "1:891983765386:web:af86b4bc028169d0f1b273",
         messagingSenderId: "891983765386",
         projectId: "instagram-clone-app-b65f7",
-        storageBucket: "instagram-clone-app-b65f7.firebasestorage.app",
+        storageBucket: "instagram-clone-app-b65f7.appspot.com",
       ),
     );
   } else {
@@ -58,7 +57,7 @@ class MyApp extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.white),
             );
           }
-          return LoginScreen();
+          return SignupScreen();
         },
       ),
     );
