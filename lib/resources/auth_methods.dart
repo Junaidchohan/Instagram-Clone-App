@@ -43,10 +43,7 @@ class AuthMethods {
         // 1. Register user in Firebase Authentication
         UserCredential cred = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
-        // UserCredential cred = await _auth.createUserWithEmailAndPassword(
-        //   email: email,
-        //   password: password,
-        // );
+
         print("Image bytes length: ${file.length}");
 
         print("User registered with UID: ${cred.user!.uid}");

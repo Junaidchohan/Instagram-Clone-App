@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_app/models/user.dart';
 import 'package:instagram_clone_app/providers/user_provider.dart';
+import 'package:instagram_clone_app/resources/firestore_method.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
 import 'package:instagram_clone_app/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +50,12 @@ class _PostCardState extends State<PostCard> {
 
           // Image + Double Tap Like
           GestureDetector(
-            onDoubleTap: () {
+            onDoubleTap: () async {
+              await FirestoreMethod().likePost(
+                widget.snap["postId"],
+                user.uid,
+                widget.snap['likes'],
+              );
               setState(() {
                 isLikeAnimating = true;
               });
@@ -94,13 +100,16 @@ class _PostCardState extends State<PostCard> {
                 smallLike: true,
                 onEnd: () {},
                 child: IconButton(
-                  icon: Icon(
-                    Icons.favorite,
-                    color: widget.snap["likes"].contains(user.uid)
-                        ? Colors.red
-                        : Colors.white,
-                  ),
-                  onPressed: () {},
+                  icon: widget.snap["likes"].contains(user.uid)
+                      ? Icon(Icons.favorite, color: Colors.red)
+                      : Icon(Icons.favorite_border),
+                  onPressed: () async {
+                    await FirestoreMethod().likePost(
+                      widget.snap["postId"],
+                      user.uid,
+                      widget.snap['likes'],
+                    );
+                  },
                 ),
               ),
               IconButton(
