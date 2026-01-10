@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone_app/models/user.dart' as model;
 import 'package:instagram_clone_app/providers/user_provider.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
+import 'package:instagram_clone_app/utils/global_variables.dart';
 import 'package:provider/provider.dart';
 
 class MobileScreenLayout extends StatefulWidget {
@@ -43,13 +44,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: [
-          Text("feed"),
-          Text("search"),
-          Text("add post"),
-          Text("notify"),
-          Text("profile"),
-        ],
+        children: homeScreenItems,
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,

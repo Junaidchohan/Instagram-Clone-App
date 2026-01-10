@@ -1,45 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
-  final String email;
+class Post {
+  final String description;
   final String uid;
-  final String photoUrl;
   final String username;
-  final String bio;
-  final List followers;
-  final List following;
+  final likes;
+  final String postId;
+  final DateTime datePublished;
+  final String postUrl;
+  final String profImage;
 
-  const User({
-    required this.username,
+  const Post({
+    required this.description,
     required this.uid,
-    required this.photoUrl,
-    required this.email,
-    required this.bio,
-    required this.followers,
-    required this.following,
+    required this.username,
+    required this.likes,
+    required this.postId,
+    required this.datePublished,
+    required this.postUrl,
+    required this.profImage,
   });
 
-  Map<String, dynamic> toJson() => {
-    "username": username,
-    "uid": uid,
-    "email": email,
-    "photoUrl": photoUrl,
-    "bio": bio,
-    "followers": followers,
-    "following": following,
-  };
-
-  static User fromSnap(DocumentSnapshot snap) {
+  static Post fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
-    return User(
-      username: snapshot["username"],
+    return Post(
+      description: snapshot["description"],
       uid: snapshot["uid"],
-      email: snapshot["email"],
-      photoUrl: snapshot["photoUrl"],
-      bio: snapshot["bio"],
-      followers: snapshot["followers"],
-      following: snapshot["following"],
+      likes: snapshot["likes"],
+      postId: snapshot["postId"],
+      datePublished: snapshot["datePublished"],
+      username: snapshot["username"],
+      postUrl: snapshot['postUrl'],
+      profImage: snapshot['profImage'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "description": description,
+    "uid": uid,
+    "likes": likes,
+    "username": username,
+    "postId": postId,
+    "datePublished": datePublished,
+    'postUrl': postUrl,
+    'profImage': profImage,
+  };
 }
