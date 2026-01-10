@@ -21,7 +21,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   bool _isLoading = false;
 
-  void postImage(String uid, String username, String profImage) async {
+  void postImage(String uid, String username, String profile) async {
     setState(() {
       _isLoading = true;
     });
@@ -31,7 +31,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         _file!,
         uid,
         username,
-        profImage,
+        profile,
       );
 
       if (res == "success") {
