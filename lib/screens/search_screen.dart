@@ -1,21 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram_clone_app/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  bool isShowUser = false;
+  final TextEditingController searchController = TextEditingController();
+  bool isShowUsers = false;
+
   @override
   void dispose() {
+    searchController.dispose();
     super.dispose();
-    _searchController.dispose();
   }
 
   @override
@@ -23,48 +25,69 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
-        centerTitle: false,
         title: TextFormField(
-          controller: _searchController,
-          decoration: InputDecoration(labelText: "Search for a user"),
-          onFieldSubmitted: (String _) {
+          controller: searchController,
+          decoration: const InputDecoration(labelText: 'Search for a user...'),
+          onFieldSubmitted: (_) {
             setState(() {
-              isShowUser = true;
+              isShowUsers = true;
             });
           },
         ),
       ),
-      body: isShowUser
-          ? FutureBuilder(
+      body: isShowUsers
+          ? FutureBuilder<QuerySnapshot>(
               future: FirebaseFirestore.instance
-                  .collection("users")
+                  .collection('users')
                   .where(
-                    "username",
-                    isGreaterThanOrEqualTo: _searchController.text,
+                    'username',
+                    isGreaterThanOrEqualTo: searchController.text,
                   )
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
+
                 return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, Index) {
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final user = snapshot.data!.docs[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          (snapshot.data! as dynamic).docs[Index]["photoUrl"],
-                        ),
+                        radius: 16,
+                        backgroundImage: NetworkImage(user['photoUrl']),
                       ),
-                      title: Text(
-                        (snapshot.data! as dynamic).docs[Index]["username"],
-                      ),
+                      title: Text(user['username']),
                     );
                   },
                 );
               },
             )
-          : Text("post"),
+          : FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('posts')
+                  .orderBy('datePublished', descending: true)
+                  .get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return MasonryGridView.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return Image.network(
+                      snapshot.data!.docs[index]['postUrl'],
+                      fit: BoxFit.cover,
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }
